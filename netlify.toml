@@ -1,0 +1,18 @@
+[build]
+	functions = "functions"
+	[build.environment]
+		NETLIFY_NEXT_PLUGIN_SKIP = "true"
+		NODE_VERSION = "14"
+
+[functions]
+	node_bundler = "esbuild"
+
+[[redirects]]
+	from = "/api/*"
+	to = "/.netlify/functions/:splat"
+	status = 200
+
+[[headers]]
+	for = "/*"
+		[headers.values]
+			Access-Control-Allow-Origin = "*"

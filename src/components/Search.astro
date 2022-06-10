@@ -1,0 +1,88 @@
+---
+
+---
+
+<style is:inline>
+	#search-input-container {
+		height: 5vw;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	#search-input {
+		border: 1px solid #111;
+		border-radius: 5px;
+		margin: 0 5px;
+	}
+
+	#search-hits > div > div > ol {
+		list-style-type: none;
+		min-width: 50vw;
+	}
+
+	#search-hits > div > div > ol > li {
+		margin: 0;
+		padding: 1vw;
+		width: 100%;
+	}
+
+	.search-result {
+		display: grid;
+		grid-template-areas: 'img title'
+							 'img artist'
+							 'img album';
+		grid-template-columns: 12vh 1fr;
+		color: #111;
+		text-decoration: none;
+		cursor: pointer;
+		border: 1px solid #888;
+		box-shadow: 1px 1px 3px #888;
+		padding: 2vw;
+		border-radius: 10px;
+	}
+
+	.search-result-img {
+		grid-area: img;
+		height: 10vh;
+	}
+
+	.search-result-title {
+		grid-area: title;
+		font-size: 3vh;
+		line-height: 4vh;
+	}
+
+	.search-result-artist {
+		grid-area: artist;
+		font-size: 2.5vh;
+		line-height: 3vh;
+	}
+
+	.search-result-album {
+		grid-area: album;
+		font-size: 2.5vh;
+		line-height: 3vh;
+	}
+</style>
+
+
+<section id="search">
+	<div id="search-input-container">
+		<label for="search-input">Search Lyrics</label>
+	</div>
+
+	<div id="search-hits"></div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"
+		integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk="
+		crossorigin="anonymous"
+	></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js"
+		integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM="
+		crossorigin="anonymous"
+	></script>
+	<script src="../js/search.js"></script>
+</section>

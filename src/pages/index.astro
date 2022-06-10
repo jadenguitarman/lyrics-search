@@ -1,0 +1,44 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Search from '../components/Search.astro';
+
+let title = 'Lyrics Database';
+let description = 'Come get your song lyrics here, powered by Algolia and Kontent.';
+---
+
+<html lang="en">
+	<head>
+		<BaseHead {title} {description} />
+
+		<style>
+			header {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 2vw;
+			}
+
+			main {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="wrapper">
+			<h1>{title}</h1>
+		</header>
+
+		<main class="content">
+			<section class="intro">
+				<p>{description}</p>
+			</section>
+
+			<Search />
+		</main>
+	</body>
+</html>

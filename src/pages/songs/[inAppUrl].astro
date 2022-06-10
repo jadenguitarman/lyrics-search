@@ -1,0 +1,146 @@
+---
+// import node-fetch so we can query for all our song data from Kontent in a `getStaticPaths` function
+import fetch from 'node-fetch';
+import BaseHead from '../../components/BaseHead.astro';
+
+export async function getStaticPaths () {
+	const response = await fetch(
+		"https://graphql.kontent.ai/fd742f82-d991-00e6-8d84-5b22158c71b0",
+		{
+			headers: {
+				"Content-Type": "application/graphql"
+			},
+			method: "POST",
+			body: `
+				query SearchIndex {
+					song_All {
+						items {
+							title
+							artist
+							albumName
+							lyrics {
+								html
+							}
+							albumCover {
+								items {
+									url
+								}
+							}
+							youtubeMusicUrl
+							inAppUrl
+						}
+					}
+				}
+			`
+		}
+	);
+	return (await response.json())
+		.data
+		.song_All
+		.items
+		.map(result => ({
+			params: {
+				inAppUrl: result.inAppUrl
+			},
+			props: {
+				...result,
+				lyrics: result.lyrics.html,
+				albumCover: result.albumCover.items[0].url
+			}
+		}));
+};
+
+
+
+
+
+// now let's start building the page with the data from Astro.params
+
+
+const {
+	title,
+	artist,
+	albumName,
+	lyrics,
+	albumCover,
+	youtubeMusicUrl,
+	inAppUrl
+} = Astro.props;
+
+---
+
+<html lang="en">
+	<head>
+		<BaseHead
+			{title}
+			description={`${title} by ${artist} from ${albumName}`}
+		/>
+
+		<style>
+			header {
+				display: grid;
+				grid-template-areas: 'img title'
+									 'img artist'
+									 'img album';
+
+				border: 1px solid #888;
+				box-shadow: 1px 1px 3px #888;
+				padding: 2vw;
+				border-radius: 10px;
+				margin-bottom: 10vh;
+				column-gap: 2vw;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.song-img {
+				grid-area: img;
+				height: 25vh;
+				object-fit: contain;
+				object-position: right;
+				width: 100%;
+				grid-template-columns: 25vh 1fr;
+			}
+
+			.song-title {
+				grid-area: title;
+				font-size: 7vh;
+			}
+
+			.song-artist {
+				grid-area: artist;
+				font-size: 3.5vh;
+			}
+
+			.song-album {
+				grid-area: album;
+				font-size: 3vh;
+			}
+
+			main, footer {
+				text-align: center;
+				margin-bottom: 10vh;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header>
+			<img class="song-img" src={albumCover} />
+			<h1 class="song-title">{title}</h1>
+			<p class="song-artist">by {artist}</p>
+			<p class="song-album">from <i>{albumName}</i></p>
+		</header>
+
+		<main>
+			<h2>Lyrics:</h2>
+			<Fragment set:html={lyrics}>
+		</main>
+
+		<footer>
+			<h2>Want to hear more?</h2>
+			<a href={youtubeMusicUrl} target="_blank">Listen to the song on YouTube Music</a>
+            <p>This site was built by <a href="https://jaden.baptista.dev">Jaden Baptista</a> with <a href="https://algolia.com">Algolia</a> and <a href="https://kontent.ai">Kontent</a>.</p>
+		</footer>
+	</body>
+</html>
